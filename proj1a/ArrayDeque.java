@@ -20,10 +20,10 @@ public class ArrayDeque<T> {
 
         if (size >= MAXSIZE) {
             T[] a = (T[]) new Object[MAXSIZE + REACTOR];
-            System.arraycopy(items, 0, a, size, front + 1);
-            System.arraycopy(items, rear, a, rear, size - rear);
+            System.arraycopy(items, rear, a, REACTOR + rear, size - rear);
+            System.arraycopy(items, 0, a, 0, front + 1);
             items = a;
-            rear = size + front + 1;
+            front = REACTOR + rear - 1;
             MAXSIZE = MAXSIZE + REACTOR;
         }
         items[front] = item;
@@ -34,10 +34,10 @@ public class ArrayDeque<T> {
     public void addLast(T item) {
         if (size >= MAXSIZE) {
             T[] a = (T[]) new Object[MAXSIZE + REACTOR];
-            System.arraycopy(items, 0, a, size, front + 1);
-            System.arraycopy(items, rear, a, rear, size - rear);
+            System.arraycopy(items, rear, a, REACTOR + rear, size - rear);
+            System.arraycopy(items, 0, a, 0, front + 1);
             items = a;
-            rear = size + front + 1;
+            front = REACTOR + rear - 1;
             MAXSIZE = MAXSIZE + REACTOR;
         }
         items[rear] = item;
@@ -79,7 +79,7 @@ public class ArrayDeque<T> {
             return null;
         }
         T value = items[(rear - 1 + MAXSIZE) % MAXSIZE];
-        rear = (rear + 1 + MAXSIZE) % MAXSIZE;
+        rear = (rear - 1 + MAXSIZE) % MAXSIZE;
         size = size - 1;
         return value;
     }
