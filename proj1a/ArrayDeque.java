@@ -21,8 +21,9 @@ public class ArrayDeque<T> {
 
         if (size >= MAXSIZE) {
             T[] a = (T[]) new Object[MAXSIZE + REACTOR];
+
             System.arraycopy(items, rear, a, REACTOR + rear, size - rear);
-            System.arraycopy(items, 0, a, 0, front + 1);
+            System.arraycopy(items, 0, a, 0, (front + 1) % MAXSIZE);
             items = a;
             front = REACTOR + rear - 1;
             MAXSIZE = MAXSIZE + REACTOR;
@@ -36,7 +37,7 @@ public class ArrayDeque<T> {
         if (size >= MAXSIZE) {
             T[] a = (T[]) new Object[MAXSIZE + REACTOR];
             System.arraycopy(items, rear, a, REACTOR + rear, size - rear);
-            System.arraycopy(items, 0, a, 0, front + 1);
+            System.arraycopy(items, 0, a, 0, (front + 1) % MAXSIZE);
             items = a;
             front = REACTOR + rear - 1;
             MAXSIZE = MAXSIZE + REACTOR;
