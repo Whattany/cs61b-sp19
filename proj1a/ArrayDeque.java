@@ -4,7 +4,8 @@ public class ArrayDeque<T> {
     private int front;
     private int rear;
     private T[] items;
-    private int REACTOR = 10;
+    private final int REACTOR = 10;
+    private final double RATE = 0.5;
 
 
     /** initialize array*/
@@ -70,6 +71,23 @@ public class ArrayDeque<T> {
         T value = items[(front + 1 + MAXSIZE) % MAXSIZE];
         front = (front + 1 + MAXSIZE) % MAXSIZE;
         size = size - 1;
+        if (size >= 16 && (((float) size) / MAXSIZE) < 0.25) {
+            int newmax = (int) (MAXSIZE * RATE);
+            T[] b = (T[]) new Object[newmax];
+            if (front >= rear) {
+                System.arraycopy(items, 0, b, 0, rear);
+                System.arraycopy(items, (front + 1 + MAXSIZE) % MAXSIZE,
+                        b, newmax - (MAXSIZE - front - 1), MAXSIZE - front - 1);
+                items = b;
+                front = newmax - (MAXSIZE - front);
+            } else {
+                System.arraycopy(items, 0, b, 0, rear - front - 1);
+                items = b;
+                front = newmax - 1;
+                rear = rear - front;
+            }
+            MAXSIZE = newmax;
+        }
         return value;
 
     }
@@ -81,17 +99,32 @@ public class ArrayDeque<T> {
         T value = items[(rear - 1 + MAXSIZE) % MAXSIZE];
         rear = (rear - 1 + MAXSIZE) % MAXSIZE;
         size = size - 1;
+        if (size >= 16 && (((float) size) / MAXSIZE) < 0.25) {
+            int newmax = (int) (MAXSIZE * RATE);
+            T[] b = (T[]) new Object[newmax];
+            if (front >= rear) {
+                System.arraycopy(items, 0, b, 0, rear);
+                System.arraycopy(items, (front + 1 + MAXSIZE) % MAXSIZE,
+                        b, newmax - (MAXSIZE - front - 1), MAXSIZE - front - 1);
+                items = b;
+                front = newmax - (MAXSIZE - front);
+            } else {
+                System.arraycopy(items, 0, b, 0, rear - front - 1);
+                items = b;
+                front = newmax - 1;
+                rear = rear - front;
+            }
+            MAXSIZE = newmax;
+        }
         return value;
     }
 
     public T get(int index) {
 
-        if (index > items.length || index < 0) {
+        if (index >= size || index < 0) {
             return null;
-        }
-        if (size > 0) {
+        } else {
             return items[(index + front + 1) % MAXSIZE];
         }
-        return null;
     }
 }
