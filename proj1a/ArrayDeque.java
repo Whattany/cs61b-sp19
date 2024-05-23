@@ -4,8 +4,7 @@ public class ArrayDeque<T> {
     private int front;
     private int rear;
     private T[] items;
-    private final int REACTOR = 10;
-    private final double RATE = 0.5;
+    private final double FACTOR = 0.25;
 
 
     /** initialize array*/
@@ -16,17 +15,36 @@ public class ArrayDeque<T> {
         rear = MAXSIZE / 2 + 1;
     }
 
+    public void resizelarger(int length) {
+        T[] a = (T[]) new Object[length];
+        System.arraycopy(items, rear, a, length - size + rear, size - rear);
+        System.arraycopy(items, 0, a, 0, (front + 1) % MAXSIZE);
+        items = a;
+        front = length - size + rear - 1;
+        MAXSIZE = length;
+    }
+    public void resizesmaller(int length) {
+        T[] b = (T[]) new Object[length];
+        if (front >= rear) {
+            System.arraycopy(items, 0, b, 0, rear);
+            System.arraycopy(items, (front + 1 + MAXSIZE) % MAXSIZE,
+                    b, length - (MAXSIZE - front - 1), MAXSIZE - front - 1);
+            front = length - (MAXSIZE - front);
+        } else {
+            System.arraycopy(items, 0, b, 0, rear - front - 1);
+            front = length - 1;
+            rear = rear - front;
+        }
+        items = b;
+        MAXSIZE = length;
+    }
+
+
     /** add first element */
     public  void addFirst(T item) {
-
+        // resize larger
         if (size >= MAXSIZE) {
-            T[] a = (T[]) new Object[MAXSIZE + REACTOR];
-
-            System.arraycopy(items, rear, a, REACTOR + rear, size - rear);
-            System.arraycopy(items, 0, a, 0, (front + 1) % MAXSIZE);
-            items = a;
-            front = REACTOR + rear - 1;
-            MAXSIZE = MAXSIZE + REACTOR;
+            resizelarger(MAXSIZE * 2);
         }
         items[front] = item;
         front = (MAXSIZE + front - 1) % MAXSIZE;
@@ -35,12 +53,7 @@ public class ArrayDeque<T> {
 
     public void addLast(T item) {
         if (size >= MAXSIZE) {
-            T[] a = (T[]) new Object[MAXSIZE + REACTOR];
-            System.arraycopy(items, rear, a, REACTOR + rear, size - rear);
-            System.arraycopy(items, 0, a, 0, (front + 1) % MAXSIZE);
-            items = a;
-            front = REACTOR + rear - 1;
-            MAXSIZE = MAXSIZE + REACTOR;
+            resizelarger(MAXSIZE * 2);
         }
         items[rear] = item;
         rear = (MAXSIZE + rear + 1) % MAXSIZE;
@@ -70,24 +83,11 @@ public class ArrayDeque<T> {
             return null;
         }
         T value = items[(front + 1 + MAXSIZE) % MAXSIZE];
+        items[(front + 1 + MAXSIZE) % MAXSIZE] = null;
         front = (front + 1 + MAXSIZE) % MAXSIZE;
         size = size - 1;
-        if (size >= 16 && (((float) size) / MAXSIZE) < 0.25) {
-            int newmax = (int) (MAXSIZE * RATE);
-            T[] b = (T[]) new Object[newmax];
-            if (front >= rear) {
-                System.arraycopy(items, 0, b, 0, rear);
-                System.arraycopy(items, (front + 1 + MAXSIZE) % MAXSIZE,
-                        b, newmax - (MAXSIZE - front - 1), MAXSIZE - front - 1);
-                items = b;
-                front = newmax - (MAXSIZE - front);
-            } else {
-                System.arraycopy(items, 0, b, 0, rear - front - 1);
-                items = b;
-                front = newmax - 1;
-                rear = rear - front;
-            }
-            MAXSIZE = newmax;
+        if (size >= 16 && (((double) size) / MAXSIZE) < FACTOR) {
+            resizesmaller((int) (MAXSIZE * 0.5));
         }
         return value;
 
@@ -98,24 +98,11 @@ public class ArrayDeque<T> {
             return null;
         }
         T value = items[(rear - 1 + MAXSIZE) % MAXSIZE];
+        items[(rear - 1 + MAXSIZE) % MAXSIZE] = null;
         rear = (rear - 1 + MAXSIZE) % MAXSIZE;
         size = size - 1;
-        if (size >= 16 && (((float) size) / MAXSIZE) < 0.25) {
-            int newmax = (int) (MAXSIZE * RATE);
-            T[] b = (T[]) new Object[newmax];
-            if (front >= rear) {
-                System.arraycopy(items, 0, b, 0, rear);
-                System.arraycopy(items, (front + 1 + MAXSIZE) % MAXSIZE,
-                        b, newmax - (MAXSIZE - front - 1), MAXSIZE - front - 1);
-                items = b;
-                front = newmax - (MAXSIZE - front);
-            } else {
-                System.arraycopy(items, 0, b, 0, rear - front - 1);
-                items = b;
-                front = newmax - 1;
-                rear = rear - front;
-            }
-            MAXSIZE = newmax;
+        if (size >= 16 && (((double) size) / MAXSIZE) < FACTOR) {
+            resizesmaller((int) (MAXSIZE * 0.5));
         }
         return value;
     }
