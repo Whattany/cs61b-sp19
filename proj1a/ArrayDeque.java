@@ -31,12 +31,14 @@ public class ArrayDeque<T> {
                     b, length - (MAXSIZE - front - 1), MAXSIZE - front - 1);
             front = length - (MAXSIZE - front);
         } else {
-            System.arraycopy(items, 0, b, 0, rear - front - 1);
+            System.arraycopy(items, front + 1, b, 0, rear - front - 1);
             front = length - 1;
             rear = rear - front;
         }
         items = b;
         MAXSIZE = length;
+
+        // null null 1 2 3 4 8 null null
     }
 
 
