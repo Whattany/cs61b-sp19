@@ -86,7 +86,7 @@ public class ArrayDeque<T> {
         items[(front + 1 + MAXSIZE) % MAXSIZE] = null;
         front = (front + 1 + MAXSIZE) % MAXSIZE;
         size = size - 1;
-        if (size >= 16 && (((double) size) / MAXSIZE) < FACTOR) {
+        if (MAXSIZE >= 16 && (((double) size) / MAXSIZE) < FACTOR) {
             resizesmaller(MAXSIZE / 2);
         }
         return value;
@@ -101,7 +101,7 @@ public class ArrayDeque<T> {
         items[(rear - 1 + MAXSIZE) % MAXSIZE] = null;
         rear = (rear - 1 + MAXSIZE) % MAXSIZE;
         size = size - 1;
-        if (size >= 16 && (((double) size) / MAXSIZE) < FACTOR) {
+        if (MAXSIZE >= 16 && (((double) size) / MAXSIZE) < FACTOR) {
             resizesmaller(MAXSIZE / 2);
         }
         return value;
