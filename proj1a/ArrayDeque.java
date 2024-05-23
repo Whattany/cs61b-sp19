@@ -32,12 +32,12 @@ public class ArrayDeque<T> {
             front = length - (MAXSIZE - front);
         } else {
             System.arraycopy(items, front + 1, b, 0, rear - front - 1);
-            front = length - 1;
             rear = rear - front;
+            front = length - 1;
+
         }
         items = b;
         MAXSIZE = length;
-
         // null null 1 2 3 4 8 null null
     }
 
