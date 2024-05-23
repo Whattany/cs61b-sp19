@@ -15,7 +15,7 @@ public class ArrayDeque<T> {
         rear = MAXSIZE / 2 + 1;
     }
 
-    public void resizelarger(int length) {
+    private void resizelarger(int length) {
         T[] a = (T[]) new Object[length];
         System.arraycopy(items, rear, a, length - size + rear, size - rear);
         System.arraycopy(items, 0, a, 0, (front + 1) % MAXSIZE);
@@ -23,7 +23,7 @@ public class ArrayDeque<T> {
         front = length - size + rear - 1;
         MAXSIZE = length;
     }
-    public void resizesmaller(int length) {
+    private void resizesmaller(int length) {
         T[] b = (T[]) new Object[length];
         if (front >= rear) {
             System.arraycopy(items, 0, b, 0, rear);
@@ -87,7 +87,7 @@ public class ArrayDeque<T> {
         front = (front + 1 + MAXSIZE) % MAXSIZE;
         size = size - 1;
         if (size >= 16 && (((double) size) / MAXSIZE) < FACTOR) {
-            resizesmaller((int) (MAXSIZE * 0.5));
+            resizesmaller(MAXSIZE / 2);
         }
         return value;
 
@@ -102,7 +102,7 @@ public class ArrayDeque<T> {
         rear = (rear - 1 + MAXSIZE) % MAXSIZE;
         size = size - 1;
         if (size >= 16 && (((double) size) / MAXSIZE) < FACTOR) {
-            resizesmaller((int) (MAXSIZE * 0.5));
+            resizesmaller(MAXSIZE / 2);
         }
         return value;
     }
