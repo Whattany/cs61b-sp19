@@ -1,11 +1,10 @@
 public class Planet {
-    double xxPos;
-    double yyPos;
-    double xxVel;
-    double yyVel;
-    double mass;
-    String imgFileName;
-    static final double G = 6.67e-11;
+    public double xxPos;
+    public double yyPos;
+    public double xxVel;
+    public double yyVel;
+    public double mass;
+    public String imgFileName;
     public Planet(double xP, double yP, double xV,
                     double yV, double m, String img){
         xxPos = xP;
@@ -32,6 +31,7 @@ public class Planet {
         return distance;
    }
    public double calcForceExertedBy(Planet b){
+    final double G = 6.67e-11;
 	double F = G * mass * b.mass/(this.calcDistance(b) * this.calcDistance(b));
         return F;       
    }
