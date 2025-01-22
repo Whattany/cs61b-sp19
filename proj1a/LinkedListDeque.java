@@ -21,6 +21,7 @@ public class LinkedListDeque<T> {
         LinkedNode i = new LinkedNode(null, item, null);
         i.next = sentinel.next;
         i.prev = sentinel;
+        sentinel.next.prev = i;
         sentinel.next = i;
         size = size + 1;
         if (size == 1) {
@@ -31,6 +32,8 @@ public class LinkedListDeque<T> {
         LinkedNode i = new LinkedNode(null, item, null);
         i.prev = sentinel.prev;
         i.next = sentinel;
+        sentinel.prev.next = i;
+        sentinel.prev = i;
         size = size + 1;
     }
     public boolean isEmpty() {

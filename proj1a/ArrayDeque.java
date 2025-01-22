@@ -87,11 +87,11 @@ public class ArrayDeque<T> {
         return retItem;
     }
     public T get(int index) {
-        if (index > size) {
+        if (index > size - 1) {
             return null;
         } else {
-            int p = (front + 1 + MAXSIZE) % MAXSIZE;
-            for (int i = 0; i < index - 1; i++) {
+            int p = front;
+            for (int i = 0; i <= index; i++) {
                 p = (p + 1 + MAXSIZE) % MAXSIZE;
             }
             return items[p];
