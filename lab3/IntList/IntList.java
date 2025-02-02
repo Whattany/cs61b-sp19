@@ -24,12 +24,11 @@ public class IntList {
         first = first0;
         rest = rest0;
     }
-
     /**
      * A List with null rest, and first = 0.
      */
     public IntList() {
-        /* NOTE: public IntList () { }  would also work. */
+    /* NOTE: public IntList () { }  would also work. */
         this(0, null);
     }
 
@@ -81,16 +80,16 @@ public class IntList {
      */
 
     public static IntList dcatenate(IntList A, IntList B) {
-
         IntList head = A;
-        if (A == null) {
+        if (head == null) {
             return B;
+        } else {
+            IntList ptrA = head;
+            while (ptrA.rest != null) {
+                ptrA = ptrA.rest;
+            }
+            ptrA.rest = B;
         }
-        while (A.rest != null) {
-            A = A.rest;
-        }
-        A.rest = B;
-
         return head;
     }
 
@@ -99,37 +98,32 @@ public class IntList {
      * * elements of B.  May NOT modify items of A.  Use 'new'.
      */
     public static IntList catenate(IntList A, IntList B) {
-
-        if (A != null) {
-            IntList res = new IntList(A.first, null);
-            IntList ptr = res;
-            A = A.rest;
-            while (A != null) {
-                ptr.rest = new IntList(A.first, null);
-                A = A.rest;
-                ptr = ptr.rest;
-            }
-            while (B != null) {
-                ptr.rest = new IntList(B.first, null);
-                B = B.rest;
-                ptr = ptr.rest;
-            }
-            return res;
-        } else {
-            if (B != null) {
-                IntList res = new IntList(B.first, null);
-                IntList ptr = res;
-                B = B.rest;
-                while (B != null) {
-                    ptr.rest = new IntList(B.first, null);
-                    B = B.rest;
-                    ptr = ptr.rest;
-                }
-                return res;
-            }
+        if (A == null && B == null) {
             return null;
-
         }
+        if (A == null && B != null) {
+            IntList L = new IntList(B.first, B.rest);
+            IntList head = L, ptrB = B.rest;
+            while (ptrB != null) {
+                L.rest = new IntList(ptrB.first, ptrB.rest);
+                ptrB = ptrB.rest;
+                L = L.rest;
+            }
+            return head;
+        }
+        IntList L = new IntList(A.first, A.rest);
+        IntList head = L, ptrA = A.rest, ptrB = B;
+        while (ptrA != null) {
+            L.rest = new IntList(ptrA.first, ptrA.rest);
+            ptrA = ptrA.rest;
+            L = L.rest;
+        }
+        while (ptrB != null) {
+            L.rest = new IntList(ptrB.first, ptrB.rest);
+            ptrB = ptrB.rest;
+            L = L.rest;
+        }
+        return head;
     }
 
 
@@ -268,27 +262,21 @@ public class IntList {
         out.format(")");
         return out.toString();
     }
-
-    public static IntList reverse(IntList L) {
-        if (L == null) {
+    public static IntList reverse(IntList A) {
+        if (A == null) {
             return null;
         }
-
-        IntList ptr = L;
-        IntList front = L;
-        IntList current = L.rest;
-        IntList temp = L;
-
-        // change the connection
-        while (current != null) {
-            temp = current;
-            current = current.rest;
-            temp.rest = front;
-            front = temp;
+        IntList head = A;
+        IntList ptrF = A;
+        IntList ptr = A.rest;
+        while (ptr != null) {
+            IntList tempA = ptr.rest;
+            ptr.rest = ptrF;
+            ptrF = ptr;
+            ptr = tempA;
         }
-        ptr.rest = null;
-        return temp;
+        head.rest = null;
+        return ptrF;
     }
-
 }
 
