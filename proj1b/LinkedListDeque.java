@@ -1,19 +1,16 @@
-public class LinkedListDeque<T> implements Deque<T> {
+public class LinkedListDeque<T>implements Deque<T> {
+    private LinkedNode sentinel;
+    private int size;
     private class LinkedNode {
         private LinkedNode prev;
         private T item;
         private LinkedNode next;
-
-        public LinkedNode(LinkedNode p, T i, LinkedNode n) {
-            prev = p;
+        LinkedNode(LinkedNode p, T i, LinkedNode n) {
             item = i;
+            prev = p;
             next = n;
         }
     }
-    private  LinkedNode sentinel;
-    private int size;
-
-    
     public LinkedListDeque() {
         sentinel = new LinkedNode(null, null, null);
         sentinel.prev = sentinel;
@@ -22,22 +19,31 @@ public class LinkedListDeque<T> implements Deque<T> {
     }
     @Override
     public void addFirst(T item) {
-        LinkedNode x = new LinkedNode(sentinel, item, sentinel.next);
-        sentinel.next.prev = x;
-        sentinel.next = x;
+        LinkedNode i = new LinkedNode(null, item, null);
+        i.next = sentinel.next;
+        i.prev = sentinel;
+        sentinel.next.prev = i;
+        sentinel.next = i;
         size = size + 1;
-
+        if (size == 1) {
+            sentinel.prev = i;
+        }
     }
     @Override
     public void addLast(T item) {
-        LinkedNode x = new LinkedNode(sentinel.prev, item, sentinel);
-        sentinel.prev.next = x;
-        sentinel.prev = x;
+        LinkedNode i = new LinkedNode(null, item, null);
+        i.prev = sentinel.prev;
+        i.next = sentinel;
+        sentinel.prev.next = i;
+        sentinel.prev = i;
         size = size + 1;
     }
     @Override
     public boolean isEmpty() {
-        return size == 0;
+        if (size == 0) {
+            return true;
+        }
+        return false;
     }
     @Override
     public int size() {
@@ -45,72 +51,61 @@ public class LinkedListDeque<T> implements Deque<T> {
     }
     @Override
     public void printDeque() {
-        LinkedNode ptr = sentinel.next;
-
-        while (ptr != sentinel) {
-            System.out.print(sentinel.item);
-            System.out.print(' ');
-            ptr = ptr.next;
+        LinkedNode p = sentinel.next;
+        for (; p != sentinel; p = p.next) {
+            if (p == sentinel.next) {
+                System.out.print(p.item);
+            } else {
+                System.out.print(" " + p.item);
+            }
         }
-        System.out.println();
-
     }
     @Override
     public T removeFirst() {
-        if (isEmpty()) {
+        if (size == 0) {
             return null;
         }
-        LinkedNode temp = sentinel.next;
-        T value = temp.item;
-        temp.next.prev = sentinel;
-        sentinel.next = temp.next;
+        T returnItem = sentinel.next.item;
+        sentinel.next.next.prev = sentinel;
+        sentinel.next = sentinel.next.next;
         size = size - 1;
-        return value;
+        return returnItem;
     }
     @Override
     public T removeLast() {
-        if (isEmpty()) {
+        if (size == 0) {
             return null;
         }
-        LinkedNode temp = sentinel.prev;
-        T value = temp.item;
-        temp.prev.next = temp.next;
-        sentinel.prev = temp.prev;
+        T returnItem = sentinel.prev.item;
+        sentinel.prev.prev.next = sentinel;
+        sentinel.prev = sentinel.prev.prev;
         size = size - 1;
-        return value;
-
+        return returnItem;
     }
     @Override
     public T get(int index) {
-        LinkedNode ptr = sentinel.next;
-        if (index >= size) {
+        if (index > size - 1) {
             return null;
         }
-        for (int i = 0; ptr != sentinel; i++) {
-            if (i == index) {
-                return ptr.item;
-            }
-            ptr = ptr.next;
+        LinkedNode p = sentinel;
+        for (int i = 0; i <= index; i++) {
+            p = p.next;
         }
-
-        return null;
+        return p.item;
     }
-
     public T getRecursive(int index) {
-        LinkedNode ptr = sentinel.next;
-
-        if (index >= size || index < 0) {
+        if (index > size - 1) {
             return null;
-        } else {
-            return getRecursiveHelper(ptr, index, 0);
         }
+        LinkedNode p = sentinel.next;
+        return helpRecursive(index, 0, p);
+
     }
-
-    private T getRecursiveHelper(LinkedNode ptr, int index, int n) {
-
-        if (n == index) {
-            return ptr.item;
+    private T helpRecursive(int index, int i, LinkedNode p) {
+        if (i == index) {
+            return p.item;
+        } else {
+            return helpRecursive(index, i + 1, p.next);
         }
-        return getRecursiveHelper(ptr.next, index, n + 1);
     }
 }

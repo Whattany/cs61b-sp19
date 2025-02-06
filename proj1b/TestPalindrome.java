@@ -16,13 +16,18 @@ public class TestPalindrome {
         assertEquals("persiflage", actual);
     }
     @Test
-    public void testisPalindrome() {
-        Palindrome a = new Palindrome();
-        assertTrue(a.isPalindrome("racecar"));
-        assertTrue(a.isPalindrome("n"));
-        assertTrue(a.isPalindrome(""));
-        assertFalse(a.isPalindrome("cat"));
-        assertFalse(a.isPalindrome("horse"));
-
+    public void testIsPalindrome() {
+        assertTrue(palindrome.isPalindrome(""));
+        assertTrue(palindrome.isPalindrome("a"));
+        assertFalse(palindrome.isPalindrome("aA"));
+        assertTrue(palindrome.isPalindrome("racecar"));
+    }
+    @Test
+    public void testIsPalindromeTwo() {
+        CharacterComparator cc = new OffByOne();
+        assertTrue(palindrome.isPalindrome("", cc));
+        assertTrue(palindrome.isPalindrome("a", cc));
+        assertFalse(palindrome.isPalindrome("aAAa", cc));
+        assertTrue(palindrome.isPalindrome("acedb", cc));
     }
 }
