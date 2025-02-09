@@ -27,7 +27,7 @@ public class TestArrayDequeGold {
                     str = str.concat("\nget(" + testNum + ")");
                     if (stuTest.size() == 0 || testNum >= stuTest.size()) {
                         assertEquals(str, null, stuTest.get(testNum));
-                    } else{
+                    } else {
                         assertEquals(str, testSolution.get(testNum), stuTest.get(testNum));
                     }
                     break;
@@ -64,6 +64,8 @@ public class TestArrayDequeGold {
                     String str2 = tempStream.toString();
                     System.setOut(oldStream);
                     assertEquals(str, str2, str1);
+                    break;
+                default:
                     break;
             }
         }
