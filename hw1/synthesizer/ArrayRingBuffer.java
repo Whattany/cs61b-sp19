@@ -47,7 +47,7 @@ public class ArrayRingBuffer<T> extends AbstractBoundedQueue<T> {
         } else {
             T deNum = rb[first];
             fillCount = fillCount - 1;
-            first = (first - 1 + capacity) % capacity;
+            first = (first + 1 + capacity) % capacity;
             return deNum;
         }
     }
@@ -56,7 +56,11 @@ public class ArrayRingBuffer<T> extends AbstractBoundedQueue<T> {
      * Return oldest item, but don't remove it.
      */
     public T peek() {
-        return rb[first];
+        if (fillCount == 0) {
+            throw new RuntimeException();
+        } else {
+            return rb[first];
+        }
     }
 
 

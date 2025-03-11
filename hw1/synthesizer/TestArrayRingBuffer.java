@@ -9,7 +9,25 @@ import static org.junit.Assert.*;
 public class TestArrayRingBuffer {
     @Test
     public void someTest() {
-        //ArrayRingBuffer arb = new ArrayRingBuffer(10);
+        ArrayRingBuffer arb = new ArrayRingBuffer(10);
+        arb.enqueue(10);
+        arb.enqueue(9);
+        arb.enqueue(8);
+        arb.enqueue(7);
+        arb.enqueue(10);
+        arb.enqueue(9);
+        arb.enqueue(8);
+        arb.enqueue(7);
+        arb.enqueue(10);
+        arb.enqueue(9);
+        assertEquals(arb.dequeue(), 10);
+        assertEquals(arb.dequeue(), 9);
+        assertEquals(arb.dequeue(), 8);
+        assertEquals(arb.dequeue(), 7);
+        arb.enqueue(8);
+        arb.enqueue(7);
+        arb.enqueue(10);
+        arb.enqueue(9);
     }
 
     /** Calls tests for ArrayRingBuffer. */
